@@ -1,0 +1,73 @@
+class Link:
+    def __init__(self, url, title):
+        self.url = url
+        self.title = title
+        self.upvotes = 0
+        self.comments = []
+
+    def add_comment(self, comment):
+        self.comments.append(comment)
+
+    def upvote(self):
+        self.upvotes += 1
+
+class SocialMediaPlatform:
+    def __init__(self):
+        self.links = []
+
+    def post_link(self, url, title):
+        new_link = Link(url, title)
+        self.links.append(new_link)
+        return new_link
+
+    def get_all_links(self):
+        return self.links
+
+    def upvote_link(self, link_id):
+        if 1 <= link_id <= len(self.links):
+            self.links[link_id - 1].upvote()
+            return True
+        return False
+
+    def post_comment(self, link_id, comment):
+        if 1 <= link_id <= len(self.links):
+            self.links[link_id - 1].add_comment(comment)
+            return True
+        return False
+
+    def upvote_comment(self, link_id, comment_id):
+        if 1 <= link_id <= len(self.links):
+            link = self.links[link_id - 1]
+            if 1 <= comment_id <= len(link.comments):
+                link.comments[comment_id - 1].upvote()
+                return True
+        return False
+
+# Create an instance of the social media platform
+social_media = SocialMediaPlatform()
+
+# Post some links
+link1 = social_media.post_link("https://example.com/article1", "Article 1")
+link2 = social_media.post_link("https://example.com/article2", "Article 2")
+
+# Upvote a link
+social_media.upvote_link(1)
+
+# Post comments on a link
+social_media.post_comment(1, "Great article!")
+social_media.post_comment(1, "Interesting!")
+
+# Upvote a comment
+social_media.upvote_comment(1, 1)
+
+# Display all links with their details
+all_links = social_media.get_all_links()
+for index, link in enumerate(all_links, start=1):
+    print(f"Link {index}: {link.title} - URL: {link.url} - Upvotes: {link.upvotes}")
+    if link.comments:
+        print("   Comments:")
+        for i, comment in enumerate(link.comments, start=1):
+            print(f"      Comment {i}: {comment.text} - Upvotes: {comment.upvotes}")
+    else:
+        print("   No comments yet")
+    print()
